@@ -28,6 +28,116 @@
       { "id": "nl_5", "name": "스프레드 스로우", "job": "나이트로드", "damage": 700, "hit_count": 8, "mob_count": 1, "cooltime": 45000, "delay": 900, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
       { "id": "nl_6", "name": "쉐도우 파트너", "job": "나이트로드", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 60000, "delay": 0, "duration": 180000, "is_buff": true, "is_summon": false, "is_attack": false },
       { "id": "nl_7", "name": "얼티밋 다크 사이트", "job": "나이트로드", "damage": 600, "hit_count": 6, "mob_count": 1, "cooltime": 30000, "delay": 720, "duration": 15000, "is_buff": true, "is_summon": false, "is_attack": false }
+    ],
+    "아델": [
+      { "id": "ade_1", "name": "샤드", "job": "아델", "damage": 420, "hit_count": 5, "mob_count": 1, "cooltime": 0, "delay": 540, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "ade_2", "name": "매직 서클", "job": "아델", "damage": 350, "hit_count": 4, "mob_count": 1, "cooltime": 0, "delay": 600, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "ade_3", "name": "디바이드", "job": "아델", "damage": 650, "hit_count": 7, "mob_count": 1, "cooltime": 8000, "delay": 720, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "ade_4", "name": "크리에이션", "job": "아델", "damage": 800, "hit_count": 8, "mob_count": 1, "cooltime": 25000, "delay": 780, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "ade_5", "name": "스톰", "job": "아델", "damage": 300, "hit_count": 3, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "ade_6", "name": "오더", "job": "아델", "damage": 400, "hit_count": 4, "mob_count": 1, "cooltime": 12000, "delay": 500, "duration": 30000, "is_buff": false, "is_summon": true, "is_attack": false },
+      { "id": "ade_7", "name": "레조넌스", "job": "아델", "damage": 700, "hit_count": 6, "mob_count": 1, "cooltime": 60000, "delay": 900, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "ade_8", "name": "인피니트", "job": "아델", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 180000, "delay": 0, "duration": 30000, "is_buff": true, "is_summon": false, "is_attack": false }
+    ],
+    "팔라딘": [
+      { "id": "pal_1", "name": "블래스트", "job": "팔라딘", "damage": 500, "hit_count": 5, "mob_count": 1, "cooltime": 0, "delay": 720, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "pal_2", "name": "디바인 차지", "job": "팔라딘", "damage": 450, "hit_count": 4, "mob_count": 1, "cooltime": 0, "delay": 630, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "pal_3", "name": "생츄어리", "job": "팔라딘", "damage": 700, "hit_count": 8, "mob_count": 1, "cooltime": 15000, "delay": 900, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "pal_4", "name": "해머", "job": "팔라딘", "damage": 600, "hit_count": 6, "mob_count": 1, "cooltime": 45000, "delay": 780, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "pal_5", "name": "디바인 스티그마", "job": "팔라딘", "damage": 400, "hit_count": 5, "mob_count": 1, "cooltime": 10000, "delay": 660, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "pal_6", "name": "홀리 유니티", "job": "팔라딘", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 120000, "delay": 0, "duration": 30000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "pal_7", "name": "위켄드", "job": "팔라딘", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 90000, "delay": 0, "duration": 60000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "pal_8", "name": "디바인 저지먼트", "job": "팔라딘", "damage": 550, "hit_count": 6, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true }
+    ],
+    "다크나이트": [
+      { "id": "dk_1", "name": "비홀더스 리벤지", "job": "다크나이트", "damage": 520, "hit_count": 5, "mob_count": 1, "cooltime": 0, "delay": 660, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "dk_2", "name": "다크 임페일", "job": "다크나이트", "damage": 480, "hit_count": 4, "mob_count": 1, "cooltime": 0, "delay": 600, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "dk_3", "name": "비홀더", "job": "다크나이트", "damage": 200, "hit_count": 2, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": false, "is_summon": true, "is_attack": false },
+      { "id": "dk_4", "name": "다크니스 오라", "job": "다크나이트", "damage": 300, "hit_count": 3, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "dk_5", "name": "궁니르 디센트", "job": "다크나이트", "damage": 700, "hit_count": 7, "mob_count": 1, "cooltime": 12000, "delay": 780, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "dk_6", "name": "다크 신서시스", "job": "다크나이트", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 90000, "delay": 0, "duration": 30000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "dk_7", "name": "비홀더스 버프", "job": "다크나이트", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 120000, "delay": 0, "duration": 40000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "dk_8", "name": "진.궁니르 디센트", "job": "다크나이트", "damage": 1000, "hit_count": 10, "mob_count": 1, "cooltime": 45000, "delay": 900, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true }
+    ],
+    "비숍": [
+      { "id": "bish_1", "name": "제네시스", "job": "비숍", "damage": 580, "hit_count": 6, "mob_count": 1, "cooltime": 15000, "delay": 780, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "bish_2", "name": "엔젤레이", "job": "비숍", "damage": 450, "hit_count": 4, "mob_count": 1, "cooltime": 0, "delay": 600, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "bish_3", "name": "빅뱅", "job": "비숍", "damage": 500, "hit_count": 5, "mob_count": 1, "cooltime": 0, "delay": 720, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "bish_4", "name": "헤븐즈 도어", "job": "비숍", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 60000, "delay": 0, "duration": 180000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "bish_5", "name": "엔젤스", "job": "비숍", "damage": 300, "hit_count": 3, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "bish_6", "name": "홀리 어드밴트", "job": "비숍", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 180000, "delay": 0, "duration": 30000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "bish_7", "name": "트라이엄프 페더", "job": "비숍", "damage": 650, "hit_count": 8, "mob_count": 1, "cooltime": 25000, "delay": 840, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "bish_8", "name": "디바인 퍼니시먼트", "job": "비숍", "damage": 400, "hit_count": 4, "mob_count": 1, "cooltime": 0, "delay": 540, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true }
+    ],
+    "섀도어": [
+      { "id": "shad_1", "name": "암살", "job": "섀도어", "damage": 500, "hit_count": 5, "mob_count": 1, "cooltime": 0, "delay": 600, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "shad_2", "name": "크루얼 스탭", "job": "섀도어", "damage": 300, "hit_count": 4, "mob_count": 1, "cooltime": 0, "delay": 540, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "shad_3", "name": "메소 익스플로전", "job": "섀도어", "damage": 600, "hit_count": 6, "mob_count": 1, "cooltime": 8000, "delay": 720, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "shad_4", "name": "다크 사이트", "job": "섀도어", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 60000, "delay": 0, "duration": 40000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "shad_5", "name": "어쌔신 스텝", "job": "섀도어", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 90000, "delay": 0, "duration": 30000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "shad_6", "name": "사보타지", "job": "섀도어", "damage": 750, "hit_count": 8, "mob_count": 1, "cooltime": 30000, "delay": 780, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "shad_7", "name": "라센 피에로", "job": "섀도어", "damage": 400, "hit_count": 3, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "shad_8", "name": "소닉 블로우", "job": "섀도어", "damage": 850, "hit_count": 9, "mob_count": 1, "cooltime": 45000, "delay": 900, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true }
+    ],
+    "듀얼블레이드": [
+      { "id": "db_1", "name": "팬텀 블로우", "job": "듀얼블레이드", "damage": 480, "hit_count": 6, "mob_count": 1, "cooltime": 0, "delay": 600, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "db_2", "name": "블레이드 퓨리", "job": "듀얼블레이드", "damage": 400, "hit_count": 5, "mob_count": 1, "cooltime": 0, "delay": 540, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "db_3", "name": "아수라", "job": "듀얼블레이드", "damage": 650, "hit_count": 8, "mob_count": 1, "cooltime": 15000, "delay": 780, "duration": 4000, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "db_4", "name": "블레이드 스톰", "job": "듀얼블레이드", "damage": 750, "hit_count": 10, "mob_count": 1, "cooltime": 45000, "delay": 900, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "db_5", "name": "미러 이미징", "job": "듀얼블레이드", "damage": 250, "hit_count": 2, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "db_6", "name": "파이널 컷", "job": "듀얼블레이드", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 90000, "delay": 0, "duration": 30000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "db_7", "name": "카르마", "job": "듀얼블레이드", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 120000, "delay": 0, "duration": 45000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "db_8", "name": "토네이도 스핀", "job": "듀얼블레이드", "damage": 550, "hit_count": 7, "mob_count": 1, "cooltime": 12000, "delay": 660, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true }
+    ],
+    "메르세데스": [
+      { "id": "merc_1", "name": "이슈타르의 링", "job": "메르세데스", "damage": 380, "hit_count": 4, "mob_count": 1, "cooltime": 0, "delay": 420, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "merc_2", "name": "스파이럴 볼텍스", "job": "메르세데스", "damage": 450, "hit_count": 5, "mob_count": 1, "cooltime": 6000, "delay": 600, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "merc_3", "name": "레전드리 스피어", "job": "메르세데스", "damage": 600, "hit_count": 7, "mob_count": 1, "cooltime": 15000, "delay": 720, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "merc_4", "name": "엘브리스", "job": "메르세데스", "damage": 300, "hit_count": 3, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "merc_5", "name": "워터쉴드", "job": "메르세데스", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 90000, "delay": 0, "duration": 30000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "merc_6", "name": "라이트닝 엣지", "job": "메르세데스", "damage": 700, "hit_count": 8, "mob_count": 1, "cooltime": 30000, "delay": 780, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "merc_7", "name": "레이븐", "job": "메르세데스", "damage": 250, "hit_count": 2, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": false, "is_summon": true, "is_attack": false },
+      { "id": "merc_8", "name": "아이리스의 축복", "job": "메르세데스", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 120000, "delay": 0, "duration": 40000, "is_buff": true, "is_summon": false, "is_attack": false }
+    ],
+    "루미너스": [
+      { "id": "lum_1", "name": "리플렉션", "job": "루미너스", "damage": 450, "hit_count": 5, "mob_count": 1, "cooltime": 0, "delay": 600, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "lum_2", "name": "라이트 크리프트", "job": "루미너스", "damage": 500, "hit_count": 6, "mob_count": 1, "cooltime": 0, "delay": 660, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "lum_3", "name": "이클립스/앱솔루트 킬", "job": "루미너스", "damage": 700, "hit_count": 8, "mob_count": 1, "cooltime": 15000, "delay": 780, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "lum_4", "name": "아포칼립스", "job": "루미너스", "damage": 600, "hit_count": 7, "mob_count": 1, "cooltime": 10000, "delay": 720, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "lum_5", "name": "이퀄리브리엄", "job": "루미너스", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 45000, "delay": 0, "duration": 15000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "lum_6", "name": "다크니스", "job": "루미너스", "damage": 300, "hit_count": 3, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "lum_7", "name": "데스 사이드", "job": "루미너스", "damage": 800, "hit_count": 10, "mob_count": 1, "cooltime": 45000, "delay": 900, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "lum_8", "name": "빛의 쇄도", "job": "루미너스", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 90000, "delay": 0, "duration": 30000, "is_buff": true, "is_summon": false, "is_attack": false }
+    ],
+    "아크": [
+      { "id": "ark_1", "name": "스펙터 잠식", "job": "아크", "damage": 480, "hit_count": 5, "mob_count": 1, "cooltime": 0, "delay": 600, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "ark_2", "name": "잠식 해제", "job": "아크", "damage": 520, "hit_count": 6, "mob_count": 1, "cooltime": 0, "delay": 660, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "ark_3", "name": "보이드", "job": "아크", "damage": 650, "hit_count": 7, "mob_count": 1, "cooltime": 10000, "delay": 720, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "ark_4", "name": "미궁", "job": "아크", "damage": 750, "hit_count": 8, "mob_count": 1, "cooltime": 30000, "delay": 840, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "ark_5", "name": "영원히 잠식된", "job": "아크", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 120000, "delay": 0, "duration": 30000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "ark_6", "name": "포식", "job": "아크", "damage": 350, "hit_count": 4, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "ark_7", "name": "귀문", "job": "아크", "damage": 400, "hit_count": 5, "mob_count": 1, "cooltime": 12000, "delay": 600, "duration": 0, "is_buff": false, "is_summon": true, "is_attack": false },
+      { "id": "ark_8", "name": "진.귀문", "job": "아크", "damage": 900, "hit_count": 12, "mob_count": 1, "cooltime": 45000, "delay": 900, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true }
+    ],
+    "카데나": [
+      { "id": "cad_1", "name": "체인 스트로크", "job": "카데나", "damage": 420, "hit_count": 5, "mob_count": 1, "cooltime": 0, "delay": 540, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "cad_2", "name": "위핑", "job": "카데나", "damage": 480, "hit_count": 4, "mob_count": 1, "cooltime": 0, "delay": 600, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "cad_3", "name": "체인 아츠", "job": "카데나", "damage": 600, "hit_count": 7, "mob_count": 1, "cooltime": 8000, "delay": 720, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "cad_4", "name": "스로우", "job": "카데나", "damage": 400, "hit_count": 4, "mob_count": 1, "cooltime": 3000, "delay": 480, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "cad_5", "name": "인스팅트", "job": "카데나", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 90000, "delay": 0, "duration": 30000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "cad_6", "name": "서머닝", "job": "카데나", "damage": 350, "hit_count": 3, "mob_count": 1, "cooltime": 12000, "delay": 600, "duration": 20000, "is_buff": false, "is_summon": true, "is_attack": false },
+      { "id": "cad_7", "name": "체인 라이트닝", "job": "카데나", "damage": 700, "hit_count": 8, "mob_count": 1, "cooltime": 30000, "delay": 780, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "cad_8", "name": "포커스", "job": "카데나", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 120000, "delay": 0, "duration": 45000, "is_buff": true, "is_summon": false, "is_attack": false }
+    ],
+    "소울마스터": [
+      { "id": "sm_1", "name": "문 라이트", "job": "소울마스터", "damage": 480, "hit_count": 5, "mob_count": 1, "cooltime": 0, "delay": 600, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "sm_2", "name": "솔라 피어스", "job": "소울마스터", "damage": 550, "hit_count": 6, "mob_count": 1, "cooltime": 0, "delay": 660, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "sm_3", "name": "크레센트 디바이드", "job": "소울마스터", "damage": 680, "hit_count": 7, "mob_count": 1, "cooltime": 10000, "delay": 720, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "sm_4", "name": "트루 사이트", "job": "소울마스터", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 60000, "delay": 0, "duration": 120000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "sm_5", "name": "이클립스", "job": "소울마스터", "damage": 800, "hit_count": 10, "mob_count": 1, "cooltime": 45000, "delay": 900, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "sm_6", "name": "솔라 슬래시", "job": "소울마스터", "damage": 0, "hit_count": 0, "mob_count": 0, "cooltime": 120000, "delay": 0, "duration": 30000, "is_buff": true, "is_summon": false, "is_attack": false },
+      { "id": "sm_7", "name": "코스모스", "job": "소울마스터", "damage": 900, "hit_count": 12, "mob_count": 1, "cooltime": 60000, "delay": 900, "duration": 0, "is_buff": false, "is_summon": false, "is_attack": true },
+      { "id": "sm_8", "name": "오라 블레이드", "job": "소울마스터", "damage": 300, "hit_count": 3, "mob_count": 1, "cooltime": 0, "delay": 0, "duration": 0, "is_buff": true, "is_summon": false, "is_attack": false }
     ]
   }
 }

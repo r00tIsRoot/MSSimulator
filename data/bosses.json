@@ -1,16 +1,25 @@
 {
   "version": "1.0.0",
   "bosses": [
+    { "id": "nlotus", "name": "노말 스우", "hp": 450000000000, "level": 210, "defense": 250, "min_level": 200 },
+    { "id": "hlotus", "name": "하드 스우", "hp": 1800000000000, "level": 225, "defense": 300, "min_level": 215 },
+    { "id": "ndamien", "name": "노말 데미안", "hp": 550000000000, "level": 215, "defense": 250, "min_level": 205 },
+    { "id": "hdamien", "name": "하드 데미안", "hp": 2000000000000, "level": 230, "defense": 300, "min_level": 220 },
+    { "id": "gslime", "name": "가디언 엔젤 슬라임", "hp": 1500000000000, "level": 225, "defense": 300, "min_level": 215 },
     { "id": "nlucid", "name": "노말 루시드", "hp": 3000000000000, "level": 230, "defense": 300, "min_level": 220 },
     { "id": "hlucid", "name": "하드 루시드", "hp": 12000000000000, "level": 250, "defense": 380, "min_level": 235 },
     { "id": "nwill", "name": "노말 윌", "hp": 3500000000000, "level": 235, "defense": 300, "min_level": 225 },
     { "id": "hwill", "name": "하드 윌", "hp": 14000000000000, "level": 255, "defense": 380, "min_level": 240 },
-    { "id": "ndnell", "name": "노문 듄켈", "hp": 7000000000000, "level": 245, "defense": 300, "min_level": 230 },
+    { "id": "ndnell", "name": "노말 듄켈", "hp": 7000000000000, "level": 245, "defense": 300, "min_level": 230 },
+    { "id": "hdnell", "name": "하드 듄켈", "hp": 25000000000000, "level": 260, "defense": 380, "min_level": 245 },
     { "id": "cgloom", "name": "카오스 글로움", "hp": 8000000000000, "level": 250, "defense": 380, "min_level": 235 },
     { "id": "nvhilla", "name": "노말 진힐라", "hp": 5000000000000, "level": 240, "defense": 300, "min_level": 230 },
+    { "id": "hvhilla", "name": "하드 진힐라", "hp": 20000000000000, "level": 255, "defense": 380, "min_level": 245 },
     { "id": "seren", "name": "세렌", "hp": 30000000000000, "level": 265, "defense": 380, "min_level": 255 },
     { "id": "kalos", "name": "카로스", "hp": 80000000000000, "level": 270, "defense": 380, "min_level": 260 },
     { "id": "nkaling", "name": "노말 칼링", "hp": 150000000000000, "level": 275, "defense": 380, "min_level": 265 },
-    { "id": "extreme", "name": "익스트림", "hp": 500000000000000, "level": 280, "defense": 400, "min_level": 275 }
+    { "id": "hkaling", "name": "하드 칼링", "hp": 500000000000000, "level": 280, "defense": 400, "min_level": 270 },
+    { "id": "nlimbo", "name": "노말 림보", "hp": 800000000000000, "level": 285, "defense": 400, "min_level": 275 },
+    { "id": "hlimbo", "name": "하드 림보", "hp": 2000000000000000, "level": 290, "defense": 420, "min_level": 280 }
   ]
 }
