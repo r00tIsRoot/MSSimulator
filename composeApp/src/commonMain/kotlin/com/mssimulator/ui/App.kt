@@ -7,11 +7,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mssimulator.data.DataRepository
+import com.mssimulator.data.SAMPLE_SKILLS_JSON
+import com.mssimulator.data.SAMPLE_BOSSES_JSON
 import com.mssimulator.engine.SimEngine
 import com.mssimulator.model.*
 import kotlinx.coroutines.withTimeout
+import kotlinx.serialization.json.Json
 
 enum class AppTab { Input, Result2Min, Result6Min, BossClear }
+
+private val json = Json { ignoreUnknownKeys = true; isLenient = true }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,51 +30,40 @@ fun App() {
     val sim2min = remember { mutableStateOf<SimulationResult?>(null) }
     val sim6min = remember { mutableStateOf<SimulationResult?>(null) }
     val simBosses = remember { mutableStateOf(emptyMap<String, SimulationResult>()) }
-    val loading = remember { mutableStateOf(true) }
-    val errorMsg = remember { mutableStateOf("") }
+    val statusMsg = remember { mutableStateOf("") }
 
-    // Load all data at startup — never leave loading=true
+    // Phase 1: Load embedded data INSTANTLY — no network
+    // Phase 2: Try GitHub fetch in background (silent upgrade)
     LaunchedEffect(Unit) {
         try {
-            val repo = DataRepository()
-            try {
-                val skillResult = try {
-                    withTimeout(10_000) { repo.fetchAllSkills() }
-                } catch (e: Exception) {
-                    Result.failure<SkillData>(e)
-                }
-                val bossResult = try {
-                    withTimeout(10_000) { repo.fetchBosses() }
-                } catch (e: Exception) {
-                    Result.failure<List<Boss>>(e)
-                }
+            val sd = json.decodeFromString<SkillData>(SAMPLE_SKILLS_JSON)
+            val bd = json.decodeFromString<BossData>(SAMPLE_BOSSES_JSON)
+            jobNames.value = sd.jobs.keys.toList().sorted()
+            skillsByJob.value = sd.jobs
+            bossList.value = bd.bosses
+            val jobCount = sd.jobs.size
+            val bossCount = bd.bosses.size
+            statusMsg.value = "Loaded $jobCount jobs, $bossCount bosses"
 
+            // Phase 2: GitHub upgrade silently
+            try {
+                val repo = DataRepository()
+                val skillResult = withTimeout(8000) { repo.fetchAllSkills() }
+                val bossResult = withTimeout(8000) { repo.fetchBosses() }
                 if (skillResult.isSuccess && bossResult.isSuccess) {
-                    val sd = skillResult.getOrThrow()
-                    jobNames.value = sd.jobs.keys.toList().sorted()
-                    skillsByJob.value = sd.jobs
-                    bossList.value = bossResult.getOrThrow()
-                } else {
-                    val sample = repo.getSampleSkillData()
-                    jobNames.value = sample.jobs.keys.toList().sorted()
-                    skillsByJob.value = sample.jobs
-                    bossList.value = repo.getSampleBossData().bosses
-                    val reason = skillResult.exceptionOrNull()?.message ?: bossResult.exceptionOrNull()?.message ?: "fetch failed"
-                    errorMsg.value = "GitHub load failed ($reason), using sample data"
+                    val ghSd = skillResult.getOrThrow()
+                    val ghBosses = bossResult.getOrThrow()
+                    jobNames.value = ghSd.jobs.keys.toList().sorted()
+                    skillsByJob.value = ghSd.jobs
+                    bossList.value = ghBosses
+                    statusMsg.value = "Updated from GitHub (${ghSd.jobs.size} jobs)"
                 }
-            } finally {
                 repo.release()
+            } catch (_: Exception) {
+                // Background fetch failed — embedded data is already loaded
             }
         } catch (e: Exception) {
-            // Worst-case: load sample data directly
-            val repo = DataRepository()
-            val sample = repo.getSampleSkillData()
-            jobNames.value = sample.jobs.keys.toList().sorted()
-            skillsByJob.value = sample.jobs
-            bossList.value = repo.getSampleBossData().bosses
-            errorMsg.value = "Emergency fallback: ${e.message ?: e::class.simpleName}"
-        } finally {
-            loading.value = false
+            statusMsg.value = "Error: ${e.message}"
         }
     }
 
@@ -120,52 +114,39 @@ fun App() {
         }
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
-            when {
-                loading.value -> LoadingIndicator()
-                else -> when (selectedTab.value) {
-                    AppTab.Input -> InputForm(
-                        spec = specState.value,
-                        onSpecChange = { specState.value = it },
-                        selectedJob = selectedJob.value,
-                        onJobChange = { selectedJob.value = it },
-                        availableJobs = jobNames.value,
-                        skills = currentSkills,
-                        bosses = bossList.value,
-                        loadError = errorMsg.value,
-                        onSimulate = {
-                            if (currentSkills.isNotEmpty()) {
-                                val engine = SimEngine(specState.value)
-                                sim2min.value = engine.simulateForDuration(currentSkills, 120)
-                                sim6min.value = engine.simulateForDuration(currentSkills, 360)
-                                simBosses.value = bossList.value.associate { b ->
-                                    b.name to engine.simulateBossClear(currentSkills, b)
-                                }
+            when (selectedTab.value) {
+                AppTab.Input -> InputForm(
+                    spec = specState.value,
+                    onSpecChange = { specState.value = it },
+                    selectedJob = selectedJob.value,
+                    onJobChange = { selectedJob.value = it },
+                    availableJobs = jobNames.value,
+                    skills = currentSkills,
+                    bosses = bossList.value,
+                    loadError = statusMsg.value,
+                    onSimulate = {
+                        if (currentSkills.isNotEmpty()) {
+                            val engine = SimEngine(specState.value)
+                            sim2min.value = engine.simulateForDuration(currentSkills, 120)
+                            sim6min.value = engine.simulateForDuration(currentSkills, 360)
+                            simBosses.value = bossList.value.associate { b ->
+                                b.name to engine.simulateBossClear(currentSkills, b)
                             }
-                        },
-                    )
-
-                    AppTab.Result2Min -> sim2min.value?.let {
-                        ResultPanel(it, "2min ${it.durationSeconds}s damage")
-                    }
-
-                    AppTab.Result6Min -> sim6min.value?.let {
-                        ResultPanel(it, "6min ${it.durationSeconds}s damage")
-                    }
-
-                    AppTab.BossClear -> BossClearPanel(simBosses.value)
+                        }
+                    },
+                )
+                AppTab.Result2Min -> sim2min.value?.let {
+                    ResultPanel(it, "2min ${it.durationSeconds}s damage")
+                } ?: Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Run simulation first")
                 }
+                AppTab.Result6Min -> sim6min.value?.let {
+                    ResultPanel(it, "6min ${it.durationSeconds}s damage")
+                } ?: Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Run simulation first")
+                }
+                AppTab.BossClear -> BossClearPanel(simBosses.value)
             }
-        }
-    }
-}
-
-@Composable
-private fun LoadingIndicator() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            CircularProgressIndicator()
-            Spacer(Modifier.height(16.dp))
-            Text("Loading game data from GitHub...")
         }
     }
 }
