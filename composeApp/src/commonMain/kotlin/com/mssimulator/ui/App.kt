@@ -3,8 +3,10 @@ package com.mssimulator.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.mssimulator.data.DataRepository
 import com.mssimulator.engine.SimEngine
 import com.mssimulator.model.*
 
@@ -13,17 +15,41 @@ enum class AppTab { Input, Result2Min, Result6Min, BossClear }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
-    var selectedTab by remember { mutableStateOf(AppTab.Input) }
-    var characterSpec by remember {
-        mutableStateOf(CharacterSpec())
+    val selectedTab = remember { mutableStateOf(AppTab.Input) }
+    val specState = remember { mutableStateOf(CharacterSpec()) }
+    val selectedJob = remember { mutableStateOf("") }
+    val jobNames = remember { mutableStateOf(emptyList<String>()) }
+    val skillsByJob = remember { mutableStateOf(emptyMap<String, List<Skill>>()) }
+    val bossList = remember { mutableStateOf(emptyList<Boss>()) }
+    val sim2min = remember { mutableStateOf<SimulationResult?>(null) }
+    val sim6min = remember { mutableStateOf<SimulationResult?>(null) }
+    val simBosses = remember { mutableStateOf(emptyMap<String, SimulationResult>()) }
+    val loading = remember { mutableStateOf(true) }
+    val errorMsg = remember { mutableStateOf("") }
+
+    // Load all data at startup
+    LaunchedEffect(Unit) {
+        val repo = DataRepository()
+        val skillResult = repo.fetchAllSkills()
+        val bossResult = repo.fetchBosses()
+
+        if (skillResult.isSuccess && bossResult.isSuccess) {
+            val sd = skillResult.getOrThrow()
+            jobNames.value = sd.jobs.keys.toList().sorted()
+            skillsByJob.value = sd.jobs
+            bossList.value = bossResult.getOrThrow()
+        } else {
+            val sample = repo.getSampleSkillData()
+            jobNames.value = sample.jobs.keys.toList().sorted()
+            skillsByJob.value = sample.jobs
+            bossList.value = repo.getSampleBossData().bosses
+            errorMsg.value = "GitHub load failed, using sample data"
+        }
+        loading.value = false
+        repo.release()
     }
-    var selectedJob by remember { mutableStateOf("") }
-    var availableJobs by remember { mutableStateOf(listOf<String>()) }
-    var skills by remember { mutableStateOf<List<Skill>>(emptyList()) }
-    var bosses by remember { mutableStateOf<List<Boss>>(emptyList()) }
-    var result2min by remember { mutableStateOf<SimulationResult?>(null) }
-    var result6min by remember { mutableStateOf<SimulationResult?>(null) }
-    var bossResults by remember { mutableStateOf<Map<String, SimulationResult>>(emptyMap()) }
+
+    val currentSkills = selectedJob.value.let { job -> skillsByJob.value[job] ?: emptyList() }
 
     Scaffold(
         topBar = {
@@ -37,32 +63,32 @@ fun App() {
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
-                    selected = selectedTab == AppTab.Input,
-                    onClick = { selectedTab = AppTab.Input },
-                    label = { Text("설정") },
+                    selected = selectedTab.value == AppTab.Input,
+                    onClick = { selectedTab.value = AppTab.Input },
+                    label = { Text("Setup") },
                     icon = {}
                 )
-                if (result2min != null) {
+                if (sim2min.value != null) {
                     NavigationBarItem(
-                        selected = selectedTab == AppTab.Result2Min,
-                        onClick = { selectedTab = AppTab.Result2Min },
-                        label = { Text("2분") },
+                        selected = selectedTab.value == AppTab.Result2Min,
+                        onClick = { selectedTab.value = AppTab.Result2Min },
+                        label = { Text("2min") },
                         icon = {}
                     )
                 }
-                if (result6min != null) {
+                if (sim6min.value != null) {
                     NavigationBarItem(
-                        selected = selectedTab == AppTab.Result6Min,
-                        onClick = { selectedTab = AppTab.Result6Min },
-                        label = { Text("6분") },
+                        selected = selectedTab.value == AppTab.Result6Min,
+                        onClick = { selectedTab.value = AppTab.Result6Min },
+                        label = { Text("6min") },
                         icon = {}
                     )
                 }
-                if (bossResults.isNotEmpty()) {
+                if (simBosses.value.isNotEmpty()) {
                     NavigationBarItem(
-                        selected = selectedTab == AppTab.BossClear,
-                        onClick = { selectedTab = AppTab.BossClear },
-                        label = { Text("보스") },
+                        selected = selectedTab.value == AppTab.BossClear,
+                        onClick = { selectedTab.value = AppTab.BossClear },
+                        label = { Text("Boss") },
                         icon = {}
                     )
                 }
@@ -70,40 +96,52 @@ fun App() {
         }
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
-            when (selectedTab) {
-                AppTab.Input -> InputForm(
-                    spec = characterSpec,
-                    onSpecChange = { characterSpec = it },
-                    selectedJob = selectedJob,
-                    onJobChange = { selectedJob = it },
-                    availableJobs = availableJobs,
-                    skills = skills,
-                    bosses = bosses,
-                    onSimulate = {
-                        val engine = SimEngine(characterSpec)
-                        if (skills.isNotEmpty()) {
-                            result2min = engine.simulateForDuration(skills, 120)
-                            result6min = engine.simulateForDuration(skills, 360)
-                            bossResults = bosses.associate { boss ->
-                                boss.name to engine.simulateBossClear(skills, boss)
+            when {
+                loading.value -> LoadingIndicator()
+                else -> when (selectedTab.value) {
+                    AppTab.Input -> InputForm(
+                        spec = specState.value,
+                        onSpecChange = { specState.value = it },
+                        selectedJob = selectedJob.value,
+                        onJobChange = { selectedJob.value = it },
+                        availableJobs = jobNames.value,
+                        skills = currentSkills,
+                        bosses = bossList.value,
+                        loadError = errorMsg.value,
+                        onSimulate = {
+                            if (currentSkills.isNotEmpty()) {
+                                val engine = SimEngine(specState.value)
+                                sim2min.value = engine.simulateForDuration(currentSkills, 120)
+                                sim6min.value = engine.simulateForDuration(currentSkills, 360)
+                                simBosses.value = bossList.value.associate { b ->
+                                    b.name to engine.simulateBossClear(currentSkills, b)
+                                }
                             }
-                        }
-                    },
-                    onJobsLoaded = { availableJobs = it },
-                    onSkillsLoaded = { skills = it },
-                    onBossesLoaded = { bosses = it },
-                )
+                        },
+                    )
 
-                AppTab.Result2Min -> result2min?.let {
-                    ResultPanel(it, "2분 ${it.durationSeconds}초 딜량")
+                    AppTab.Result2Min -> sim2min.value?.let {
+                        ResultPanel(it, "2min ${it.durationSeconds}s damage")
+                    }
+
+                    AppTab.Result6Min -> sim6min.value?.let {
+                        ResultPanel(it, "6min ${it.durationSeconds}s damage")
+                    }
+
+                    AppTab.BossClear -> BossClearPanel(simBosses.value)
                 }
-
-                AppTab.Result6Min -> result6min?.let {
-                    ResultPanel(it, "6분 ${it.durationSeconds}초 딜량")
-                }
-
-                AppTab.BossClear -> BossClearPanel(bossResults)
             }
+        }
+    }
+}
+
+@Composable
+private fun LoadingIndicator() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            CircularProgressIndicator()
+            Spacer(Modifier.height(16.dp))
+            Text("Loading game data from GitHub...")
         }
     }
 }

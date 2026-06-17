@@ -14,6 +14,3 @@ Thumbs.db
 
 # Node
 node_modules/
-
-# Generated docs (for GitHub Pages)
-docs/

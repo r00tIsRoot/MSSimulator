@@ -9,9 +9,22 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import kotlinx.serialization.json.Json
 
+/**
+ * Data repository that fetches game data from GitHub raw JSON.
+ *
+ * Default: https://raw.githubusercontent.com/r00tIsRoot/MSSimulatorData/main/
+ *
+ * Files expected at repo root:
+ *   - skills.json
+ *   - bosses.json
+ */
 class DataRepository(
-    private val baseUrl: String = "https://raw.githubusercontent.com/your-org/ms-data/main"
+    private val baseUrl: String = GITHUB_DATA_URL,
 ) {
+    companion object {
+        const val GITHUB_DATA_URL = "https://raw.githubusercontent.com/r00tIsRoot/MSSimulatorData/main"
+    }
+
     private val client = HttpClient()
 
     private val json = Json {
@@ -21,8 +34,7 @@ class DataRepository(
     }
 
     suspend fun fetchSkills(jobName: String): Result<List<Skill>> = runCatching {
-        val response = client.get("$baseUrl/skills.json").bodyAsText()
-        val data = json.decodeFromString<SkillData>(response)
+        val data = fetchAllSkills().getOrThrow()
         data.jobs[jobName] ?: emptyList()
     }
 
@@ -37,6 +49,7 @@ class DataRepository(
         data.bosses
     }
 
+    /** Parse raw JSON string (for fallback/offline) */
     fun parseSkillData(jsonString: String): SkillData {
         return json.decodeFromString<SkillData>(jsonString)
     }
@@ -44,6 +57,10 @@ class DataRepository(
     fun parseBossData(jsonString: String): BossData {
         return json.decodeFromString<BossData>(jsonString)
     }
+
+    /** Embedded sample data fallback */
+    fun getSampleSkillData(): SkillData = parseSkillData(SAMPLE_SKILLS_JSON)
+    fun getSampleBossData(): BossData = parseBossData(SAMPLE_BOSSES_JSON)
 
     fun release() {
         client.close()
