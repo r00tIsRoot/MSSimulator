@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.mssimulator.data.DataRepository
 import com.mssimulator.engine.SimEngine
 import com.mssimulator.model.*
+import kotlinx.coroutines.withTimeout
 
 enum class AppTab { Input, Result2Min, Result6Min, BossClear }
 
@@ -27,26 +28,49 @@ fun App() {
     val loading = remember { mutableStateOf(true) }
     val errorMsg = remember { mutableStateOf("") }
 
-    // Load all data at startup
+    // Load all data at startup — never leave loading=true
     LaunchedEffect(Unit) {
-        val repo = DataRepository()
-        val skillResult = repo.fetchAllSkills()
-        val bossResult = repo.fetchBosses()
+        try {
+            val repo = DataRepository()
+            try {
+                val skillResult = try {
+                    withTimeout(10_000) { repo.fetchAllSkills() }
+                } catch (e: Exception) {
+                    Result.failure<SkillData>(e)
+                }
+                val bossResult = try {
+                    withTimeout(10_000) { repo.fetchBosses() }
+                } catch (e: Exception) {
+                    Result.failure<List<Boss>>(e)
+                }
 
-        if (skillResult.isSuccess && bossResult.isSuccess) {
-            val sd = skillResult.getOrThrow()
-            jobNames.value = sd.jobs.keys.toList().sorted()
-            skillsByJob.value = sd.jobs
-            bossList.value = bossResult.getOrThrow()
-        } else {
+                if (skillResult.isSuccess && bossResult.isSuccess) {
+                    val sd = skillResult.getOrThrow()
+                    jobNames.value = sd.jobs.keys.toList().sorted()
+                    skillsByJob.value = sd.jobs
+                    bossList.value = bossResult.getOrThrow()
+                } else {
+                    val sample = repo.getSampleSkillData()
+                    jobNames.value = sample.jobs.keys.toList().sorted()
+                    skillsByJob.value = sample.jobs
+                    bossList.value = repo.getSampleBossData().bosses
+                    val reason = skillResult.exceptionOrNull()?.message ?: bossResult.exceptionOrNull()?.message ?: "fetch failed"
+                    errorMsg.value = "GitHub load failed ($reason), using sample data"
+                }
+            } finally {
+                repo.release()
+            }
+        } catch (e: Exception) {
+            // Worst-case: load sample data directly
+            val repo = DataRepository()
             val sample = repo.getSampleSkillData()
             jobNames.value = sample.jobs.keys.toList().sorted()
             skillsByJob.value = sample.jobs
             bossList.value = repo.getSampleBossData().bosses
-            errorMsg.value = "GitHub load failed, using sample data"
+            errorMsg.value = "Emergency fallback: ${e.message ?: e::class.simpleName}"
+        } finally {
+            loading.value = false
         }
-        loading.value = false
-        repo.release()
     }
 
     val currentSkills = selectedJob.value.let { job -> skillsByJob.value[job] ?: emptyList() }
