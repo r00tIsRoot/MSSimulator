@@ -25,7 +25,6 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.ui)
                 implementation(compose.components.resources)
-                implementation(libs.ktor.client.core)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.coroutines.core)
             }
@@ -33,14 +32,12 @@ kotlin {
 
         val wasmJsMain by getting {
             dependencies {
-                implementation(libs.ktor.client.js)
             }
         }
 
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
-                implementation(libs.ktor.client.okhttp)
             }
         }
     }
