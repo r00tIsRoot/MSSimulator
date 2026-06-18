@@ -2,19 +2,43 @@ package com.mssimulator.engine
 
 import com.mssimulator.model.*
 
-class SimEngine(private val spec: CharacterSpec) {
+class SimEngine(private val spec: CharacterSpec? = null) {
 
+    /**
+     * 계수(%) 기반 시뮬레이션 — 캐릭터 스펙과 무관하게 스킬 계수(damage% × hitCount)만으로
+     * 딜량을 계산한다. 직업만 선택하면 즉시 계산 가능하다. (보스 클리어 제외)
+     */
+    fun simulateCoefficient(
+        skills: List<Skill>,
+        durationSeconds: Int,
+    ): SimulationResult = runSimulation(skills, durationSeconds, boss = null) { skill ->
+        skill.damagePerUse()
+    }
+
+    /**
+     * 스펙 기반 시뮬레이션 — 캐릭터 스펙으로 절대 딜량을 계산한다. 보스 클리어 타임 산정에 사용.
+     */
     fun simulateForDuration(
         skills: List<Skill>,
         durationSeconds: Int,
         boss: Boss? = null,
     ): SimulationResult {
+        val activeSpec = spec ?: CharacterSpec()
+        return runSimulation(skills, durationSeconds, boss) { skill ->
+            activeSpec.calculateSkillDamage(skill, boss?.defense ?: 300)
+        }
+    }
+
+    private fun runSimulation(
+        skills: List<Skill>,
+        durationSeconds: Int,
+        boss: Boss?,
+        damageOf: (Skill) -> Double,
+    ): SimulationResult {
         if (skills.isEmpty()) return SimulationResult()
 
         // 1. 각 스킬의 1회 데미지 계산
-        val skillDamages = skills.associateWith { skill ->
-            spec.calculateSkillDamage(skill, boss?.defense ?: 300)
-        }
+        val skillDamages = skills.associateWith { skill -> damageOf(skill) }
 
         val totalTimeMs = durationSeconds * 1000L
         val snapshots = mutableListOf<DamageSnapshot>()

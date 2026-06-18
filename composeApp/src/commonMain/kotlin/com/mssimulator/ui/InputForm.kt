@@ -78,6 +78,13 @@ fun InputForm(
                         "${skills.size} skills loaded",
                         style = MaterialTheme.typography.bodySmall,
                     )
+                    if (skills.isNotEmpty()) {
+                        Text(
+                            "2분/6분 딜량이 스킬 계수(%) 기반으로 자동 계산되었습니다",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    }
                 }
             }
         }
@@ -87,6 +94,10 @@ fun InputForm(
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text("Character Spec", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        "보스 클리어 타임 계산에만 사용됩니다 (2분/6분 딜량은 스펙 무관)",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
                     Spacer(Modifier.height(12.dp))
 
                     SpecTextField("Level", spec.level.toString(), { v ->
@@ -128,9 +139,9 @@ fun InputForm(
                 enabled = skills.isNotEmpty(),
             ) {
                 if (skills.isEmpty()) {
-                    Text("Select a job first")
+                    Text("직업을 먼저 선택하세요")
                 } else {
-                    Text("Run Simulation (${skills.size} skills)")
+                    Text("보스 클리어 계산 (스펙 기반)")
                 }
             }
         }

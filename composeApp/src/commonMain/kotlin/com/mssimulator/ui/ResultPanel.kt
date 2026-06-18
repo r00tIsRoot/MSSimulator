@@ -45,14 +45,19 @@ fun ResultPanel(
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(title, style = MaterialTheme.typography.titleLarge)
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        "스킬 계수(%) 기반 · 캐릭터 스펙 무관",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
                     Spacer(Modifier.height(12.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
-                        StatItem("총 딜량", formattedDamage)
-                        StatItem("DPM", formattedDpm)
+                        StatItem("총 계수", "$formattedDamage%")
+                        StatItem("분당 계수", "$formattedDpm%")
                         StatItem("시간", "${result.durationSeconds}초")
                     }
 
@@ -71,7 +76,7 @@ fun ResultPanel(
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("시간별 누적 딜량", style = MaterialTheme.typography.titleMedium)
+                    Text("시간별 누적 계수(%)", style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
                     DamageLineChart(
                         snapshots = result.snapshots,
@@ -88,7 +93,7 @@ fun ResultPanel(
                     Text("스킬 사용 로그", style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = result.rotation.joinToString(" → ").take(500),
+                        text = result.rotation.joinToString(" > ").take(500),
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }

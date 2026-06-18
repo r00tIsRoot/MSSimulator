@@ -76,6 +76,18 @@ fun App() {
 
     val currentSkills = selectedJob.value.let { job -> skillsByJob.value[job] ?: emptyList() }
 
+    // 직업이 선택되면 2분/6분 딜량을 스킬 계수(%) 기반으로 즉시 계산 (스펙 무관)
+    LaunchedEffect(selectedJob.value, skillsByJob.value) {
+        if (currentSkills.isNotEmpty()) {
+            val engine = SimEngine()
+            sim2min.value = engine.simulateCoefficient(currentSkills, 120)
+            sim6min.value = engine.simulateCoefficient(currentSkills, 360)
+        } else {
+            sim2min.value = null
+            sim6min.value = null
+        }
+    }
+
     MaterialTheme(
         colorScheme = darkColorScheme(
             primary = androidx.compose.ui.graphics.Color(0xFF90CAF9),
@@ -144,10 +156,9 @@ fun App() {
                         bosses = bossList.value,
                         loadError = statusMsg.value,
                         onSimulate = {
+                            // 보스 클리어는 절대 딜량이 필요하므로 캐릭터 스펙 기반으로 계산
                             if (currentSkills.isNotEmpty()) {
                                 val engine = SimEngine(specState.value)
-                                sim2min.value = engine.simulateForDuration(currentSkills, 120)
-                                sim6min.value = engine.simulateForDuration(currentSkills, 360)
                                 simBosses.value = bossList.value.associate { b ->
                                     b.name to engine.simulateBossClear(currentSkills, b)
                                 }
@@ -155,14 +166,14 @@ fun App() {
                         },
                     )
                     AppTab.Result2Min -> sim2min.value?.let {
-                        ResultPanel(it, "2min ${it.durationSeconds}s damage")
+                        ResultPanel(it, "2분 딜량 (계수 기반)")
                     } ?: Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Run simulation first")
+                        Text("직업을 선택하세요")
                     }
                     AppTab.Result6Min -> sim6min.value?.let {
-                        ResultPanel(it, "6min ${it.durationSeconds}s damage")
+                        ResultPanel(it, "6분 딜량 (계수 기반)")
                     } ?: Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Run simulation first")
+                        Text("직업을 선택하세요")
                     }
                     AppTab.BossClear -> BossClearPanel(simBosses.value)
                 }
