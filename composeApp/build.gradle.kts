@@ -5,6 +5,10 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+compose.resources {
+    generateResClass = always
+}
+
 kotlin {
     wasmJs {
         browser {

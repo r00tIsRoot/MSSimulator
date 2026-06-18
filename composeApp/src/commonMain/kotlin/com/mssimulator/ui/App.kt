@@ -26,7 +26,7 @@ private data class AppData(
 @Composable
 fun App() {
     val koreanFf = koreanFontFamily()
-    val appTypography = remember {
+    val appTypography = remember(koreanFf) {
         val f = koreanFf
         with(Typography()) {
             copy(
