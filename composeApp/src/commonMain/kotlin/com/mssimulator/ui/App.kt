@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.mssimulator.data.SAMPLE_SKILLS_JSON
 import com.mssimulator.data.SAMPLE_BOSSES_JSON
 import com.mssimulator.engine.SimEngine
+import com.mssimulator.font.koreanFontFamily
 import com.mssimulator.model.*
 import kotlinx.serialization.json.Json
 
@@ -24,6 +25,30 @@ private data class AppData(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
+    val koreanFf = koreanFontFamily()
+    val appTypography = remember {
+        val f = koreanFf
+        with(Typography()) {
+            copy(
+                displayLarge = displayLarge.copy(fontFamily = f),
+                displayMedium = displayMedium.copy(fontFamily = f),
+                displaySmall = displaySmall.copy(fontFamily = f),
+                headlineLarge = headlineLarge.copy(fontFamily = f),
+                headlineMedium = headlineMedium.copy(fontFamily = f),
+                headlineSmall = headlineSmall.copy(fontFamily = f),
+                titleLarge = titleLarge.copy(fontFamily = f),
+                titleMedium = titleMedium.copy(fontFamily = f),
+                titleSmall = titleSmall.copy(fontFamily = f),
+                bodyLarge = bodyLarge.copy(fontFamily = f),
+                bodyMedium = bodyMedium.copy(fontFamily = f),
+                bodySmall = bodySmall.copy(fontFamily = f),
+                labelLarge = labelLarge.copy(fontFamily = f),
+                labelMedium = labelMedium.copy(fontFamily = f),
+                labelSmall = labelSmall.copy(fontFamily = f),
+            )
+        }
+    }
+
     val selectedTab = remember { mutableStateOf(AppTab.Input) }
     val specState = remember { mutableStateOf(CharacterSpec()) }
     val selectedJob = remember { mutableStateOf("") }
@@ -60,7 +85,8 @@ fun App() {
             background = androidx.compose.ui.graphics.Color(0xFF121220),
             onSurface = androidx.compose.ui.graphics.Color(0xFFE0E0E0),
             onBackground = androidx.compose.ui.graphics.Color(0xFFE0E0E0),
-        )
+        ),
+        typography = appTypography,
     ) {
         Scaffold(
             topBar = {
