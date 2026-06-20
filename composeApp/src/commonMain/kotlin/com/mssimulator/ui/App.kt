@@ -6,8 +6,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mssimulator.data.SAMPLE_SKILLS_JSON
-import com.mssimulator.data.SAMPLE_BOSSES_JSON
+import com.mssimulator.data.fetchBossesJson
+import com.mssimulator.data.fetchSkillsJson
 import com.mssimulator.engine.SimEngine
 import com.mssimulator.font.koreanFontFamily
 import com.mssimulator.model.*
@@ -16,11 +16,6 @@ import kotlinx.serialization.json.Json
 enum class AppTab { Input, Result2Min, Result6Min, BossClear }
 
 private val json = Json { ignoreUnknownKeys = true; isLenient = true }
-
-private data class AppData(
-    val jobs: Map<String, List<Skill>>,
-    val bosses: List<Boss>,
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,17 +55,20 @@ fun App() {
     val simBosses = remember { mutableStateOf(emptyMap<String, SimulationResult>()) }
     val statusMsg = remember { mutableStateOf("") }
 
-    // Load embedded data once at startup — no network, instant
+    // Load data from MSSimulatorData GitHub repo at startup
     LaunchedEffect(Unit) {
+        statusMsg.value = "데이터 로딩 중..."
         try {
-            val sd = json.decodeFromString<SkillData>(SAMPLE_SKILLS_JSON)
-            val bd = json.decodeFromString<BossData>(SAMPLE_BOSSES_JSON)
+            val skillsText = fetchSkillsJson()
+            val bossesText = fetchBossesJson()
+            val sd = json.decodeFromString<SkillData>(skillsText)
+            val bd = json.decodeFromString<BossData>(bossesText)
             jobNames.value = sd.jobs.keys.toList().sorted()
             skillsByJob.value = sd.jobs
             bossList.value = bd.bosses
-            statusMsg.value = "${sd.jobs.size} jobs, ${bd.bosses.size} bosses loaded"
+            statusMsg.value = "${sd.jobs.size} jobs, ${bd.bosses.size} bosses loaded from MSSimulatorData"
         } catch (e: Exception) {
-            statusMsg.value = "Data error: ${e.message}"
+            statusMsg.value = "Data load failed: ${e.message}"
         }
     }
 
