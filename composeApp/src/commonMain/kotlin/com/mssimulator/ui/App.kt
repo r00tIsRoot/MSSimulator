@@ -6,6 +6,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+
+import com.mssimulator.data.REMOTE_SKILLS_URL
+import com.mssimulator.data.REMOTE_BOSSES_URL
+import com.mssimulator.data.fetchText
 import com.mssimulator.data.fetchBossesJson
 import com.mssimulator.data.fetchSkillsJson
 import com.mssimulator.engine.SimEngine
@@ -54,6 +58,7 @@ fun App() {
     val sim6min = remember { mutableStateOf<SimulationResult?>(null) }
     val simBosses = remember { mutableStateOf(emptyMap<String, SimulationResult>()) }
     val statusMsg = remember { mutableStateOf("") }
+
 
     // Load data from MSSimulatorData GitHub repo at startup
     LaunchedEffect(Unit) {
