@@ -7,9 +7,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-import com.mssimulator.data.REMOTE_SKILLS_URL
-import com.mssimulator.data.REMOTE_BOSSES_URL
-import com.mssimulator.data.fetchText
 import com.mssimulator.data.fetchBossesJson
 import com.mssimulator.data.fetchSkillsJson
 import com.mssimulator.engine.SimEngine
@@ -58,11 +55,10 @@ fun App() {
     val sim6min = remember { mutableStateOf<SimulationResult?>(null) }
     val simBosses = remember { mutableStateOf(emptyMap<String, SimulationResult>()) }
     val statusMsg = remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(true) }
+    var loadMessage by remember { mutableStateOf("데이터 로딩 중…") }
 
-
-    // Load data from MSSimulatorData GitHub repo at startup
     LaunchedEffect(Unit) {
-        statusMsg.value = "데이터 로딩 중..."
         try {
             val skillsText = fetchSkillsJson()
             val bossesText = fetchBossesJson()
@@ -71,10 +67,13 @@ fun App() {
             jobNames.value = sd.jobs.keys.toList().sorted()
             skillsByJob.value = sd.jobs
             bossList.value = bd.bosses
-            statusMsg.value = "${sd.jobs.size} jobs, ${bd.bosses.size} bosses loaded from MSSimulatorData"
+            loadMessage = "원격 데이터 v${sd.version} 로드 완료 (${sd.jobs.size} jobs, ${bd.bosses.size} bosses)"
+            statusMsg.value = loadMessage
         } catch (e: Exception) {
-            statusMsg.value = "Data load failed: ${e.message}"
+            loadMessage = "데이터 로드 실패: ${e.message}"
+            statusMsg.value = "${e.message}"
         }
+        isLoading = false
     }
 
     val currentSkills = selectedJob.value.let { job -> skillsByJob.value[job] ?: emptyList() }
@@ -103,7 +102,19 @@ fun App() {
         ),
         typography = appTypography,
     ) {
-        Scaffold(
+        if (isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    CircularProgressIndicator()
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(loadMessage, style = MaterialTheme.typography.bodyLarge)
+                }
+            }
+        } else {
+            Scaffold(
             topBar = {
                 TopAppBar(
                     title = { Text("MS Simulator") },
@@ -183,4 +194,5 @@ fun App() {
             }
         }
     }
+}
 }
