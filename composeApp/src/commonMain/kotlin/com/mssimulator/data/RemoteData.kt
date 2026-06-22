@@ -9,6 +9,3 @@ private const val REMOTE_BASE =
 
 const val REMOTE_SKILLS_URL = "$REMOTE_BASE/skills.json"
 const val REMOTE_BOSSES_URL = "$REMOTE_BASE/bosses.json"
-
-/** Fetch the text body of [url]. Throws on network/HTTP errors. */
-expect suspend fun fetchText(url: String): String
