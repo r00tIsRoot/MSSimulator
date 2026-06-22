@@ -93,7 +93,7 @@ fun ResultPanel(
                     Text("스킬 사용 로그", style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = result.rotation.joinToString(" > ").take(500),
+                        text = result.rotation.joinToString(" > "),
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }

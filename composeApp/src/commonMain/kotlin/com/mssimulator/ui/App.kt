@@ -6,11 +6,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mssimulator.data.SAMPLE_SKILLS_JSON
-import com.mssimulator.data.SAMPLE_BOSSES_JSON
+
 import com.mssimulator.data.REMOTE_SKILLS_URL
 import com.mssimulator.data.REMOTE_BOSSES_URL
 import com.mssimulator.data.fetchText
+import com.mssimulator.data.fetchBossesJson
+import com.mssimulator.data.fetchSkillsJson
 import com.mssimulator.engine.SimEngine
 import com.mssimulator.font.koreanFontFamily
 import com.mssimulator.model.*
@@ -19,11 +20,6 @@ import kotlinx.serialization.json.Json
 enum class AppTab { Input, Result2Min, Result6Min, BossClear }
 
 private val json = Json { ignoreUnknownKeys = true; isLenient = true }
-
-private data class AppData(
-    val jobs: Map<String, List<Skill>>,
-    val bosses: List<Boss>,
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,33 +59,21 @@ fun App() {
     val simBosses = remember { mutableStateOf(emptyMap<String, SimulationResult>()) }
     val statusMsg = remember { mutableStateOf("") }
 
-    // 1) 내장 데이터를 먼저 즉시 로드해 UI가 비지 않도록 한다 (네트워크 불필요)
-    // 2) 이어서 원격(github.com/r00tIsRoot/MSSimulatorData)에서 최신 데이터를 받아 덮어쓴다
+
+    // Load data from MSSimulatorData GitHub repo at startup
     LaunchedEffect(Unit) {
-        fun apply(sd: SkillData, bd: BossData) {
+        statusMsg.value = "데이터 로딩 중..."
+        try {
+            val skillsText = fetchSkillsJson()
+            val bossesText = fetchBossesJson()
+            val sd = json.decodeFromString<SkillData>(skillsText)
+            val bd = json.decodeFromString<BossData>(bossesText)
             jobNames.value = sd.jobs.keys.toList().sorted()
             skillsByJob.value = sd.jobs
             bossList.value = bd.bosses
-        }
-
-        try {
-            apply(
-                json.decodeFromString<SkillData>(SAMPLE_SKILLS_JSON),
-                json.decodeFromString<BossData>(SAMPLE_BOSSES_JSON),
-            )
-            statusMsg.value = "내장 데이터 로드됨 · 원격 데이터 확인 중…"
+            statusMsg.value = "${sd.jobs.size} jobs, ${bd.bosses.size} bosses loaded from MSSimulatorData"
         } catch (e: Exception) {
-            statusMsg.value = "내장 데이터 오류: ${e.message}"
-        }
-
-        try {
-            val sd = json.decodeFromString<SkillData>(fetchText(REMOTE_SKILLS_URL))
-            val bd = json.decodeFromString<BossData>(fetchText(REMOTE_BOSSES_URL))
-            apply(sd, bd)
-            statusMsg.value =
-                "원격 데이터 v${sd.version} 로드됨 (${sd.jobs.size} jobs, ${bd.bosses.size} bosses)"
-        } catch (e: Exception) {
-            statusMsg.value = "원격 로드 실패, 내장 데이터 사용 중: ${e.message}"
+            statusMsg.value = "Data load failed: ${e.message}"
         }
     }
 

@@ -68,9 +68,9 @@ class SimEngine(private val spec: CharacterSpec? = null) {
             cooldownMap[buff] = currentTimeMs // immediate use
         }
 
-        // 어택 스킬을 효과적인 DPS 순으로 정렬 (skip if delay=0 or damage=0)
+        // 어택 스킬을 효과적인 DPS 순으로 정렬 (damage>0만 필요, delay가 0이면 최소 1ms 사용)
         val sortedAttackSkills = attackSkills
-            .filter { it.delay > 0 && it.damage > 0 }
+            .filter { it.damage > 0 }
             .sortedByDescending { it.effectiveDps() }
 
         while (currentTimeMs < totalTimeMs) {
@@ -136,12 +136,13 @@ class SimEngine(private val spec: CharacterSpec? = null) {
             for (skill in sortedAttackSkills) {
                 val nextAvailable = cooldownMap.getValue(skill)
                 if (currentTimeMs >= nextAvailable) {
-                    // 이 스킬 사용!
-                    cooldownMap[skill] = currentTimeMs + skill.delay + skill.cooltime
+                    // 이 스킬 사용! delay가 0이면 최소 1ms를 가정 (무한루프 방지)
+                    val effectiveDelay = skill.delay.coerceAtLeast(1)
+                    cooldownMap[skill] = currentTimeMs + effectiveDelay + skill.cooltime
                     val dmg = skillDamages[skill] ?: 0.0
                     totalDamage += dmg
                     rotationLog.add(skill.name)
-                    currentTimeMs += skill.delay
+                    currentTimeMs += effectiveDelay
                     skillUsed = true
                     break
                 }

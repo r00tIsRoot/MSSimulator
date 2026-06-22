@@ -31,17 +31,20 @@ kotlin {
                 implementation(compose.components.resources)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.ktor.client.core)
             }
         }
 
         val wasmJsMain by getting {
             dependencies {
+                implementation(libs.ktor.client.js)
             }
         }
 
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
+                implementation(libs.ktor.client.java)
             }
         }
     }
