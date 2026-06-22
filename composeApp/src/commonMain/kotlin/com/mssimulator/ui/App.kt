@@ -8,6 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mssimulator.data.SAMPLE_SKILLS_JSON
 import com.mssimulator.data.SAMPLE_BOSSES_JSON
+import com.mssimulator.data.REMOTE_SKILLS_URL
+import com.mssimulator.data.REMOTE_BOSSES_URL
+import com.mssimulator.data.fetchText
 import com.mssimulator.engine.SimEngine
 import com.mssimulator.font.koreanFontFamily
 import com.mssimulator.model.*
@@ -60,17 +63,33 @@ fun App() {
     val simBosses = remember { mutableStateOf(emptyMap<String, SimulationResult>()) }
     val statusMsg = remember { mutableStateOf("") }
 
-    // Load embedded data once at startup — no network, instant
+    // 1) 내장 데이터를 먼저 즉시 로드해 UI가 비지 않도록 한다 (네트워크 불필요)
+    // 2) 이어서 원격(github.com/r00tIsRoot/MSSimulatorData)에서 최신 데이터를 받아 덮어쓴다
     LaunchedEffect(Unit) {
-        try {
-            val sd = json.decodeFromString<SkillData>(SAMPLE_SKILLS_JSON)
-            val bd = json.decodeFromString<BossData>(SAMPLE_BOSSES_JSON)
+        fun apply(sd: SkillData, bd: BossData) {
             jobNames.value = sd.jobs.keys.toList().sorted()
             skillsByJob.value = sd.jobs
             bossList.value = bd.bosses
-            statusMsg.value = "${sd.jobs.size} jobs, ${bd.bosses.size} bosses loaded"
+        }
+
+        try {
+            apply(
+                json.decodeFromString<SkillData>(SAMPLE_SKILLS_JSON),
+                json.decodeFromString<BossData>(SAMPLE_BOSSES_JSON),
+            )
+            statusMsg.value = "내장 데이터 로드됨 · 원격 데이터 확인 중…"
         } catch (e: Exception) {
-            statusMsg.value = "Data error: ${e.message}"
+            statusMsg.value = "내장 데이터 오류: ${e.message}"
+        }
+
+        try {
+            val sd = json.decodeFromString<SkillData>(fetchText(REMOTE_SKILLS_URL))
+            val bd = json.decodeFromString<BossData>(fetchText(REMOTE_BOSSES_URL))
+            apply(sd, bd)
+            statusMsg.value =
+                "원격 데이터 v${sd.version} 로드됨 (${sd.jobs.size} jobs, ${bd.bosses.size} bosses)"
+        } catch (e: Exception) {
+            statusMsg.value = "원격 로드 실패, 내장 데이터 사용 중: ${e.message}"
         }
     }
 
